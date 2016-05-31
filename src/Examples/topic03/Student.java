@@ -15,27 +15,20 @@ public class Student {
 	
 	private static Random random = new Random();
 	
-	public Student(String firstName, String lastName, int semester, double averagGrade) {
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.semester = semester;
-		this.averageGrade = averagGrade;
+	private static String[] firstNames = {"Tom", "Ben", "Joe", "Andy", "Pete", "Sam"};
+	private static String[] lastNames = {"Smith", "Miller", "Jordan", "Wright", "Bush"};
+
+	public Student() {
+		this.firstName = firstNames[random.nextInt(firstNames.length)];
+		this.lastName = lastNames[random.nextInt(lastNames.length)];
+		this.semester = random.nextInt(10) + 1;
+		this.averageGrade = 5*random.nextDouble() + 1;
 	}
-	
-	public static Student randomStudent() {
-		String[] firstNames = {"Tom", "Ben", "Joe", "Andy", "Pete", "Sam"};
-		String[] lastNames = {"Smith", "Miller", "Jordan", "Wright", "Bush"};
-		return new Student(
-				firstNames[random.nextInt(firstNames.length)],
-				lastNames[random.nextInt(lastNames.length)],
-				random.nextInt(10) + 1,
-				5*random.nextDouble() + 1);
-	}
-	
+		
 	public static void main(String[] args) {
 
 		// Compute a string containing a sorted list of 10 first/last names of students in 6th semester in upper-case
-		String names = Stream.generate(() -> randomStudent())
+		String names = Stream.generate(Student::new)
 			.filter(s -> s.semester == 6)
 			.limit(10)
 			.peek(s -> System.out.println(s.semester)) // for testing
@@ -47,7 +40,7 @@ public class Student {
 		System.out.println(names);
 		
 		// Print the average of 100 rounded grades of students with average grade >= 4.0
-		Stream.generate(() -> randomStudent())
+		Stream.generate(Student::new)
 			.limit(100)
 			.filter(s -> s.averageGrade >= 4.0)
 			.mapToDouble(s -> s.averageGrade)
